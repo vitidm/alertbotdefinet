@@ -219,7 +219,7 @@ dispatcher = updater.dispatcher
 
 # agrega un handler para el comando /volume
 # Se agrega el manejador de comando "/volume"
-updater.dispatcher.add_handler(CommandHandler('volumebot', volume))
+updater.dispatcher.add_handler(CommandHandler('volume', volume))
 
 # Se agrega el manejador de comando "/stopbot"
 updater.dispatcher.add_handler(CommandHandler('stopbot', stop))
