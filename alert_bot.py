@@ -1,6 +1,7 @@
 import time
 import json
 import requests
+import logging
 import random
 from telegram.ext import Updater, CommandHandler
 from datetime import datetime, timedelta
@@ -154,26 +155,23 @@ def formatData():
         if average_data_sorted[0] <= current_value < average_data_sorted[1]:
             category_text = 'Bad'
             range_text = f"(${reduce_number(average_data_sorted[0])} - ${reduce_number(average_data_sorted[1])})"
-            print(range_text)
+            
         elif average_data_sorted[1] <= current_value < average_data_sorted[2]:
             category_text = 'Low'
             range_text = f"(${reduce_number(average_data_sorted[1])} - ${reduce_number(average_data_sorted[2])})"
-            print(range_text)
+            
         elif average_data_sorted[2] <= current_value < average_data_sorted[3]:
             category_text = 'Mid'
             range_text = f"(${reduce_number(average_data_sorted[2])} - ${reduce_number(average_data_sorted[3])})"
-            print(range_text)
+            
         elif average_data_sorted[3] <= current_value < average_data_sorted[4]:
             category_text = 'Good'
             range_text = f"(${reduce_number(average_data_sorted[3])} - ${reduce_number(average_data_sorted[4])})"
-            print(range_text)
+            
         else:
             category_text = 'High'
             range_text = f"(${reduce_number(average_data_sorted[4])} - ${reduce_number(average_data_sorted[5])})"
-            print(range_text)
-
-        print(category_text)
-        print(average_data_sorted)
+            
     else:
         print("No value for today in the dictionary.")
 
@@ -182,6 +180,15 @@ def formatData():
 def volume(update, context):
     current_price_eth, current_gwei, variation_price_eth, price_eth_arrow, current_date, formatted_value, current_value_eth_format, category_text, range_text = formatData()
     context.bot.send_message(chat_id=update.message.chat_id, text=f"<b>💹Market Status: </b>{category_text}\n<b>📈{category_text}-Range:</b>{range_text}<b>\n<b>💰 24h DEFI Vol:</b> ${formatted_value}\n<b>📊 24h DEFI Vol(ETH):</b>{current_value_eth_format} ETH\n\n⚡️ETH Price:</b> ${current_price_eth}\n<b>{price_eth_arrow}ETH Variation:</b>{variation_price_eth}% \n<b>⛽️ Gas Price:</b>{current_gwei}\n\n <u><a href='https://t.me/definetofficialportal'>TG</a></u> <u><a href='https://www.dextools.io/app/es/ether/pair-explorer/0x5935c4651db7be150416d600fb1cc21753785678'>Chart</a></u> <u><a href='https://twitter.com/DefiNetdApp'>TW</a></u>", reply_markup=keyboard,parse_mode='HTML', disable_web_page_preview=True)
+    
+    # Info Group and People
+    chat_name = update.message.chat.title
+    chat_id = update.message.chat_id
+    user_id = update.message.from_user.id
+    username = update.message.from_user.username
+    name = update.message.from_user.full_name
+    print(f"Group: {chat_name} | Group Id: {chat_id} ||| User Id: {user_id} | Username: {username} | User Name: {name}")
+
 
 # Función que se ejecuta cuando se recibe el comando /stop
 def stop(update, context):
