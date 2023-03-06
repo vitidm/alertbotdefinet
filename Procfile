@@ -1,1 +1,1 @@
-bot: python3 definet_tokens_v2.py
+bot: python3 alert_bot.py
