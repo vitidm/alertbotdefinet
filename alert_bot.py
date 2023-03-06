@@ -1,7 +1,6 @@
 import time
 import json
 import requests
-import logging
 import random
 from telegram.ext import Updater, CommandHandler
 from datetime import datetime, timedelta
@@ -97,9 +96,27 @@ def formatData():
     total_hour1_by_date_hour = {}
     for date_hour_string, hour1_value in hour1_by_date.items():
         total_hour1 = sum(hour1_value.values())
-        if total_hour1 < 1000000:
-            hour_string = date_hour_string[-2:]
-            date_string = date_hour_string[:-3]
+        # if total_hour1 < 1000000:
+        #     hour_string = date_hour_string[-2:]
+        #     date_string = date_hour_string[:-3]
+        #     if date_string not in total_hour1_by_date_hour:
+                
+        #         total_hour1_by_date_hour[date_string] = {}
+        #     if hour_string not in total_hour1_by_date_hour[date_string]:
+        #         total_hour1_by_date_hour[date_string][hour_string] = []
+        #     total_hour1_by_date_hour[date_string][hour_string].append(total_hour1)
+        hour_string = date_hour_string[-2:]
+        date_string = date_hour_string[:-3]
+        if date_string != current_date:
+            if total_hour1 < 750000:
+                if date_string not in total_hour1_by_date_hour:
+                    total_hour1_by_date_hour[date_string] = {}
+                if hour_string not in total_hour1_by_date_hour[date_string]:
+                    total_hour1_by_date_hour[date_string][hour_string] = []
+                total_hour1_by_date_hour[date_string][hour_string].append(total_hour1)
+        else:
+            
+            
             if date_string not in total_hour1_by_date_hour:
                 total_hour1_by_date_hour[date_string] = {}
             if hour_string not in total_hour1_by_date_hour[date_string]:
@@ -107,7 +124,7 @@ def formatData():
             total_hour1_by_date_hour[date_string][hour_string].append(total_hour1)
     
     total_hour1_by_date = {}
-
+    
     sum_by_date = {}
     for date_string, hours_by_hour in total_hour1_by_date_hour.items():
         sum_by_date[date_string] = sum(sum(hours) for hours in hours_by_hour.values())
@@ -125,6 +142,7 @@ def formatData():
     # Final Transformations if current date
     if current_date in sum_by_date:
         current_value = sum_by_date[current_date]
+        
         current_value_eth_format = '{:,.0f}'.format(current_value / current_price_eth)
         formatted_value = "{:,}".format(current_value)
         variation_price_eth = '{:,.2f}'.format(variation_price_eth)
@@ -151,7 +169,7 @@ def formatData():
 
         average_data_sorted = sorted(average_data, reverse=False)
         average_data_sorted.insert(0, 0)
-
+        
         if average_data_sorted[0] <= current_value < average_data_sorted[1]:
             category_text = 'Bad'
             range_text = f"(${reduce_number(average_data_sorted[0])} - ${reduce_number(average_data_sorted[1])})"
@@ -201,7 +219,7 @@ dispatcher = updater.dispatcher
 
 # agrega un handler para el comando /volume
 # Se agrega el manejador de comando "/volume"
-updater.dispatcher.add_handler(CommandHandler('volume', volume))
+updater.dispatcher.add_handler(CommandHandler('volumebot', volume))
 
 # Se agrega el manejador de comando "/stopbot"
 updater.dispatcher.add_handler(CommandHandler('stopbot', stop))
